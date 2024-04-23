@@ -16,7 +16,7 @@ async def send_daily_message():
     await bot.send_message(chat_id=chat_id, text=message)
 
 def schedule_daily_message():
-    schedule.every().day.at('00:28:45').do(asyncio.run, send_daily_message())
+    schedule.every().day.at('00:38:20').do(asyncio.run, send_daily_message())
 
 def run_schedule():
     schedule_daily_message()
