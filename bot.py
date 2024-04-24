@@ -1,23 +1,32 @@
 import asyncio
+import threading
 import time
-from telegram import Bot
+from telegram import Bot, Update
+from telegram.ext import *
 from apiRequest.api_request import generate_recipe
 from dotenv import dotenv_values
 from database.firebaseFuncs import *
 import schedule
 
 config = dotenv_values(".env")
-bot = Bot(token=config["bot_token"])
-chat_id = config["chat_id"]
+
+
 
 async def send_daily_message():
-    today_plate= getTodaysMeal()
-    recipe =  generate_recipe(today_plate)
+    bot = Bot(token=config["bot_token"])
+    chat_id = config["chat_id"]
+    today_plate = getTodaysMeal()
+    recipe = generate_recipe(today_plate)
     message = f"El plato de hoy es: {today_plate}:\n\nUna idea para prepararlo es:\n{recipe}"
     await bot.send_message(chat_id=chat_id, text=message)
 
 def schedule_daily_message():
-    schedule.every().day.at('18:19:00').do(asyncio.run, send_daily_message())
+    schedule.every().day.at('18:55:50').do(run_async_in_thread, send_daily_message)
+
+def run_async_in_thread(coro):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(coro())
 
 def run_schedule():
     schedule_daily_message()
@@ -25,5 +34,17 @@ def run_schedule():
         schedule.run_pending()
         time.sleep(1)
 
+async def start_commmand(update, context):
+    await update.message.reply_text('Hello! Welcome To Store!')
+
+def main():
+    application = Application.builder().token(config["bot_token"]).build()
+    application.add_handler(CommandHandler('start', start_commmand))
+    application.run_polling(1.0)
+    
+
 if __name__ == "__main__":
-    run_schedule()
+    schedule_thread = threading.Thread(target=run_schedule)
+    schedule_thread.start()
+
+    main()
