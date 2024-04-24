@@ -14,15 +14,18 @@ config = dotenv_values(".env")
 
 
 async def send_daily_message():
-    bot = Bot(token=config["bot_token"])
-    chat_id = config["chat_id"]
-    today_plate = getTodaysMeal()
-    recipe = generate_recipe(today_plate)
-    message = f"El plato de hoy es: {today_plate}:\n\nUna idea para prepararlo es:\n{recipe}"
-    await bot.send_message(chat_id=chat_id, text=message)
+    try:
+        bot = Bot(token=config["bot_token"])
+        chat_id = config["chat_id"]
+        today_plate = getTodaysMeal()
+        recipe = generate_recipe(today_plate)
+        message = f"El plato de hoy es: {today_plate}:\n\nUna idea para prepararlo es:\n{recipe}"
+        await bot.send_message(chat_id=chat_id, text=message)
+    except:
+        print("Error sending message")
 
 def schedule_daily_message():
-    schedule.every().day.at('18:55:50').do(run_async_in_thread, send_daily_message)
+    schedule.every().day.at('19:28:40').do(run_async_in_thread, send_daily_message)
 
 def run_async_in_thread(coro):
     loop = asyncio.new_event_loop()
@@ -45,7 +48,7 @@ def main():
     
 
 if __name__ == "__main__":
-    #schedule_thread = threading.Thread(target=run_schedule)
-    #schedule_thread.start()
+    schedule_thread = threading.Thread(target=run_schedule)
+    schedule_thread.start()
 
     main()
