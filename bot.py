@@ -3,20 +3,21 @@ import time
 from telegram import Bot
 from apiRequest.api_request import generate_recipe
 from dotenv import dotenv_values
+from database.firebaseFuncs import *
 import schedule
 
 config = dotenv_values(".env")
 bot = Bot(token=config["bot_token"])
 chat_id = config["chat_id"]
-plate = 'Pollo a la parmesana'
 
 async def send_daily_message():
-    recipe =  generate_recipe(plate)
-    message = f"{plate}:\nUna idea para preparar es:\n{recipe}"
+    today_plate= getTodaysMeal()
+    recipe =  generate_recipe(today_plate)
+    message = f"El plato de hoy es: {today_plate}:\n\nUna idea para prepararlo es:\n{recipe}"
     await bot.send_message(chat_id=chat_id, text=message)
 
 def schedule_daily_message():
-    schedule.every().day.at('00:38:20').do(asyncio.run, send_daily_message())
+    schedule.every().day.at('18:19:00').do(asyncio.run, send_daily_message())
 
 def run_schedule():
     schedule_daily_message()

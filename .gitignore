@@ -1,5 +1,6 @@
 .env
 env
+firebaseKey.json
 __pycache__/
 *.py[cod]
 *$py.class
