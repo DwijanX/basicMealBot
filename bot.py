@@ -43,7 +43,7 @@ async def start_commmand(update, context):
 
 def main():
     application = Application.builder().token(config["bot_token"]).build()
-    application.add_handler(CommandHandler('setMenu', commandHandler.add_handler))
+    application.add_handler(CommandHandler('setMenu', commandHandler.update_meal_handler))
     application.run_polling(1.0)
     
 
