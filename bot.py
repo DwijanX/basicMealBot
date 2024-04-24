@@ -6,6 +6,7 @@ from telegram.ext import *
 from apiRequest.api_request import generate_recipe
 from dotenv import dotenv_values
 from database.firebaseFuncs import *
+import handleCommands.commandHandler as commandHandler
 import schedule
 
 config = dotenv_values(".env")
@@ -39,12 +40,12 @@ async def start_commmand(update, context):
 
 def main():
     application = Application.builder().token(config["bot_token"]).build()
-    application.add_handler(CommandHandler('start', start_commmand))
+    application.add_handler(CommandHandler('setMenu', commandHandler.add_handler))
     application.run_polling(1.0)
     
 
 if __name__ == "__main__":
-    schedule_thread = threading.Thread(target=run_schedule)
-    schedule_thread.start()
+    #schedule_thread = threading.Thread(target=run_schedule)
+    #schedule_thread.start()
 
     main()

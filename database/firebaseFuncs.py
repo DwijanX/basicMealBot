@@ -29,3 +29,9 @@ def getTodaysMeal():
     today = datetime.datetime.now().strftime("%d")
     print(today)
     return meal_doc[today]
+
+def setMealDoc(data):
+    current_month_year = datetime.datetime.now().strftime("%B%Y")
+    document_id = current_month_year.lower()
+    doc_ref = db.collection("meals").document(document_id)
+    doc_ref.set(data, merge=True)
