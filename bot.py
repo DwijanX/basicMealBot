@@ -38,17 +38,17 @@ def run_schedule():
         schedule.run_pending()
         time.sleep(1)
 
-async def start_commmand(update, context):
-    await update.message.reply_text('Hello! Welcome To Store!')
+
 
 def main():
     application = Application.builder().token(config["bot_token"]).build()
     application.add_handler(CommandHandler('setMenu', commandHandler.update_meal_handler))
+    application.add_handler(CommandHandler('generateMenu', commandHandler.generate_meals))
     application.run_polling(1.0)
     
 
 if __name__ == "__main__":
-    schedule_thread = threading.Thread(target=run_schedule)
-    schedule_thread.start()
+    #schedule_thread = threading.Thread(target=run_schedule)
+    #schedule_thread.start()
 
     main()

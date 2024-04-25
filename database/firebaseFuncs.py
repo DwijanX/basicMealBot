@@ -35,3 +35,11 @@ def setMealDoc(data):
     document_id = current_month_year.lower()
     doc_ref = db.collection("meals").document(document_id)
     doc_ref.set(data, merge=True)
+
+def getAllMealDocs():
+    meal_docs = []
+    collection_ref = db.collection("meals")
+    docs = collection_ref.get()
+    for doc in docs:
+        meal_docs.append(doc.to_dict())
+    return meal_docs
