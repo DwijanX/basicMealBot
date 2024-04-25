@@ -4,6 +4,7 @@ firebaseKey.json
 __pycache__/
 *.py[cod]
 *$py.class
+Dockerfile
 
 # C extensions
 *.so
