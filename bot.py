@@ -28,7 +28,7 @@ async def send_daily_message():
         await bot.send_message(chat_id=chat_id, text="No pude enviar el plato de hoy, si no registraste un menu este mes prueba usar el comando /generateMenu o agregalo tu con /setMenu")
 
 def schedule_daily_message():
-    schedule.every().day.at('09:00:00',"America/La_Paz").do(run_async_in_thread, send_daily_message)
+    schedule.every().day.at('12:11:00',"America/La_Paz").do(run_async_in_thread, send_daily_message)
 
 def run_async_in_thread(coro):
     loop = asyncio.new_event_loop()
@@ -47,6 +47,7 @@ def main():
     application = Application.builder().token(config["bot_token"]).build()
     application.add_handler(CommandHandler('setMenu', commandHandler.update_meal_handler))
     application.add_handler(CommandHandler('generateMenu', commandHandler.generate_meals))
+    application.add_handler(CommandHandler('getToday', commandHandler.get_today_meal))
     application.run_polling(1.0)
     
 app = Flask(__name__)

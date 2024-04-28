@@ -2,6 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import datetime
+import pytz
 
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate('firebaseKey.json')
@@ -23,7 +24,8 @@ def getMealDoc(document_id):
 
 
 def getTodaysMeal():
-    current_month_year = datetime.datetime.now().strftime("%B%Y")
+    timezone = pytz.timezone('America/La_Paz')
+    current_month_year = datetime.datetime.now(timezone).strftime("%B%Y")
     document_id = current_month_year.lower()
     meal_doc = getMealDoc(document_id)
     today = datetime.datetime.now().strftime("%d")
@@ -31,7 +33,8 @@ def getTodaysMeal():
     return meal_doc[today]
 
 def setMealDoc(data):
-    current_month_year = datetime.datetime.now().strftime("%B%Y")
+    timezone = pytz.timezone('America/La_Paz')
+    current_month_year = datetime.datetime.now(timezone).strftime("%B%Y")
     document_id = current_month_year.lower()
     doc_ref = db.collection("meals").document(document_id)
     doc_ref.set(data, merge=True)

@@ -23,3 +23,8 @@ async def generate_meals(update, context):
     matches = re.findall(pattern, ans)
     firebaseFuncs.setMealDoc(json.loads(matches[0]))
     await update.message.reply_text("el nuevo menu seria: "+matches[0])
+
+async def get_today_meal(update, context):
+    today_plate = firebaseFuncs.getTodaysMeal()
+    recipe = api_request.generate_recipe(today_plate)
+    await update.message.reply_text(f"El plato de hoy es: {today_plate}:\n\nUna idea para prepararlo es:\n{recipe}")
