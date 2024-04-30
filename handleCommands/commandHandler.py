@@ -1,3 +1,4 @@
+from utils.MenuParser import parseJsonMenu
 import utils.foodParser as foodParser
 import database.firebaseFuncs as firebaseFuncs
 import apiRequest.api_request as api_request
@@ -11,7 +12,10 @@ async def update_meal_handler(update, context):
     await update.message.reply_text("Menu actualizado")
 
 async def generate_meals(update, context):
-    print("Generating meals")
+    print("Generating meals",context.args)
+    month=None
+    if(len(context.args)!=0):
+        month=context.args[0]
     meal_Docs = firebaseFuncs.getAllMealDocs()
     
     unique_values = set(value.lower() for menu_dict in meal_Docs for value in menu_dict.values())
@@ -21,8 +25,8 @@ async def generate_meals(update, context):
     pattern = r'\{[^{}]*\}'
 
     matches = re.findall(pattern, ans)
-    firebaseFuncs.setMealDoc(json.loads(matches[0]))
-    await update.message.reply_text("el nuevo menu seria: "+matches[0])
+    firebaseFuncs.setMealDoc(json.loads(matches[0]),month)
+    await update.message.reply_text("el nuevo menu seria: \n"+parseJsonMenu(matches[0],month))
 
 async def get_today_meal(update, context):
     today_plate = firebaseFuncs.getTodaysMeal()

@@ -28,7 +28,7 @@ async def send_daily_message():
         await bot.send_message(chat_id=chat_id, text="No pude enviar el plato de hoy, si no registraste un menu este mes prueba usar el comando /generateMenu o agregalo tu con /setMenu")
 
 def schedule_daily_message():
-    schedule.every().day.at('12:11:00',"America/La_Paz").do(run_async_in_thread, send_daily_message)
+    schedule.every().day.at('09:00:00',"America/La_Paz").do(run_async_in_thread, send_daily_message)
 
 def run_async_in_thread(coro):
     loop = asyncio.new_event_loop()

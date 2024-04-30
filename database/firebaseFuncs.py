@@ -32,10 +32,15 @@ def getTodaysMeal():
     print(today)
     return meal_doc[today]
 
-def setMealDoc(data):
-    timezone = pytz.timezone('America/La_Paz')
-    current_month_year = datetime.datetime.now(timezone).strftime("%B%Y")
-    document_id = current_month_year.lower()
+def setMealDoc(data, month=None):
+    if(month==None):
+        timezone = pytz.timezone('America/La_Paz')
+        current_month_year = datetime.datetime.now(timezone).strftime("%B%Y")
+        document_id = current_month_year.lower()
+    else:
+        timezone = pytz.timezone('America/La_Paz')
+        document_id = month.lower()+datetime.datetime.now(timezone).strftime("%Y").lower()
+    print(document_id)
     doc_ref = db.collection("meals").document(document_id)
     doc_ref.set(data, merge=True)
 
